@@ -1,0 +1,14 @@
+\section{Introduction}
+
+Twitter, a micro-blogging system combining social network and text content, has demonstrated itself as a leading breaking news provider, and a platform of sharing opinions and interests. The text content published by users is called tweet, which is within 140 characters in length. Common practice of responding to a tweet includes retweet a tweet, like a tweet and reply a tweet. Users are connected with each other by the following relation. Following a user means subscribing to his tweets as a follower. This does not require other user's permission. A user can follow any other users, but others are not required to follow back. This non-reciprocal relation is much different from the friend relation in social networking services like Facebook and MySpace.
+User on Facebook has a complete profile by filling out his education, work and interest, while Twitter user can only fill out a piece of 160 characters bio information. It is difficult to precisely recommend related users, news and services on Twitter with limited user profile information. Thus, extracting a user's hidden profile is a valuable topic which improves user experience and advertisement revenue at the same time. Additionally, it will also help to improve the search result relevance by assigning a higher rank to the results in which the user is more interested.
+We will propose an algorithm to extract a user's hidden profile from his followers and followings using the closeness and tweets similarity of two users, which is based on the intuition that people with similar background and interests tend to connect with each other.
+However, proposing an efficient solution to the problem is very challenging due to sparseness and incompleteness of the following relation data. The Twitter network graph is a very large but spare graph which involves over a hundred million users, while most of them are connected to only hundreds of users. Additionally, some users have more than a thousand followers which cannot be completely retrieved due to the limit of Twitter API. Thus, our algorithm should be able to predict with sparse and incomplete following relation data.
+
+
+\subsection{Paper Organization}
+
+The rest of the paper is organized as follows.  Section
+\ref{sec:related-work} compares our work with related work.  Section
+\ref{sec:problem} presents the mathematical formulation of the
+problem.  Section \ref{sec:method} presents
