@@ -10,31 +10,7 @@
 
 \section{Our Approach}\label{sec:method}
 
-%I think we need rewrite this part. Thanks.
-
-%Our crawler will begin with Twitter users from four universities including UCLA, USC, Stanford and MIT, and perform a two-step random walk starting from these users to obtain a larger set of different background users. Every user's profile, followers and followings information will be retrieved. The crawler will also retrieve these users' tweets posted after a specific time.
-%We will analysis the number of followers, followings, tweets and retweets for each user, and quantify a user's influence on these metrics using a PageRank like mechanism.
-%We will analysis the tweet keywords for each user, and provide a metric to evaluate the tweets similarity between two users. We will also compare the interest difference between users in different universities.
-%We will quantify two users' closeness using their tweet and reply (regarding retweet as a kind of reply) behavior data. Our model is similar to the model used in predicting a chess game result based on two players' past campaign results \cite{elo1986rating}.
-%We will propose an algorithm for extracting a user's hidden profile. Each edge will be weighted by the closeness and tweets similarity of the corresponding two users. The algorithm performs a random walk on the weighted graph to collect all possible hidden profile for a specific user.
-
-\subsection{Data Collection}
-We selected 20 seed users from each of the four universities, including UCLA, USC, Stanford and MIT. User profile (id, location, screen name, number of followings and followers, and a short biography) of these seed users was crawled using the Twitter API. Starting from these seed users, a two-step random walk is performed to retrieve their followers and their followers' followers. If a new user from these four universities is discovered during the procedure, this user is marked as a seed user and another two-step random walk starting from this user is performed. The crawler has collected more than 540,000 users and 780,000,000 following relations. It has also collected the most recent 20 tweets for each user.
-
-\subsection{Data Analysis}
-Keywords are extracted from user profiles. Keyword frequencies are calculated, and some keywords are manually labeled into three categories, namely location (CA, Los Angeles, NY, etc.), occupation (CEO, writer, blogger, student, etc.) and affiliation (UCLA, USC, Stanford, MIT, Google, etc.). Following is some statistics about the users in different universities (a subset of affiliation).
-
-\subsubsection{Who follows whom on twitter?}
-Table 1 shows the average numbers of followings in different universities with respect to users in different universities. 'Other' represents that the user does not mention any of these four universities in his biography. For example, the third row and second column means 38.17 followings of a UCLA user is in other universities on average. It is shown that the number of followers in the same university is ten times larger than that in different universities. However, this only counts for 5\% among all a user's followers. A possible reason might be that many users do not write their universities in their biographies.
-
-%Maybe we don't need this
-
-%\subsubsection{Who replies/retweets to whom on twitter?}
-%More than 75,000 replies/retweets are collected. 86\% of them are between a user in these four universities and a user in affiliation "Other". For the rest replies/retweets, 98\% of them are between users in the same universities.
-
-\subsection{Model Design}
-
-\subsubsection{Snowball Model}
+\subsection{Snowball Model}
 In considering the operational models for the extraction of a profile keyword of a user through a social network $G$, we will first treat this problem as an information influence spread processing.
 
 For a specified keyword or phrase $z_i$, we obtain user set $L$ and $D$. We consider the users in set $L$ as active users and users in set $D$ as inactive users. We focus on settings guided by previous work about the spread of influence in which each user's state to become active increases monotonically as more of its friends become actives. Once a user become active, it remains active in the future operations. Thus, for an inactive user $u$: as time passed, more and more of users followed by $v$ become active; at some point, this cause $v$ to become active, and $v$ influenced his followers.
@@ -44,7 +20,7 @@ $$s_j = \sum_{u_j\ follows\ v} \frac{s_v}{\#\ of\ u_j's\ friends}$$
 
 In iteration $t$, all users were active in previous iterations remain active and we active any user $u_j$ for which the active score is above at least $1$. We repeat this iteration until all users become active or there is no user could be active. In order to obtain the ranking result for $z_i$, here we rank the inactive users in $D$ according to their time point to become an active user.
 
-\subsubsection{Random Work Model}
+\subsection{Random Work Model}
 Considering the graph structure generated by twitter social network, it is similar to web graph structure where users are pages, and there are some outgoing links from $u$ to $v$ since that $u$ is following $v$, and also incoming links from $v$ to $u$ since that $u$ is followed by $v$.
 
 In order to predict the relationship between keywords or phrase and users, a second general approach is to predict the relationship importance between users in $D$ and users in $L$. For user $u$, an easy way to rank the importance of other users to him is performing the random walk from $u$. After the random walk starting from user $u$ go through his friends links, we obtain the rank of users in which top ranked users might be most important guy that $u$ follows. By the random walk starting from user $u$ go through his follower links, we obtain the rank of users in which top ranked users might be most important guy that followed $u$. For a specified or phrase $z$, we add undirected links from $z$ to users have this keyword. And then, after the random walk from user $u$, we get how important that $z$ is related to $u$ in both directions.
@@ -58,7 +34,7 @@ Here $B$ is a vector represent the trust value of each user. $B_i = \frac{1}{|L|
 
 Finally, we rank the user according to the value $r_i=a_i \times b_i$ since $r_i$ represent the importance of profile $z_i$ from both friends and followers directions.
 
-\subsubsection{Naive Bayes Model}
+\subsection{Naive Bayes Model}
 Both two models described above works well in some situations. However, we ignore the tweets information and other profile information in our dataset. With the information extracted from our dataset, another general approach to our problem would be to view it as a classification task. We take users that already have some profile keyword as positive training examples, and treat other users as negative training examples. Then we could learn a classifier that predicts how likely that a user is going to have a profile keyword.
 
 There are several machine learning algorithms that address this problem. Here we use a Naive Bayesian model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels. Assume that $X_1, X_2, \cdots X_n$ are training vectors $X_i=(x_1, x_2, \cdots, x_m)$ and each training vector has a class label $c$. The Bayes estimate $p(x_j|c)$ from the training examples to maximize the probability:
@@ -68,7 +44,7 @@ In our paper, we apply this Naive Bayes method to learn the probability that use
 However, the dataset for this classification problem has several disadvantage. The first is that the class is imbalance, for each profile $z_i$, there will be a very small fraction of the users in the network and learning is particularly hard in domains with high class imbalance. The second challenge is that there are huge amount of features. There are lots different words appeared in users tweets and also typos and connected words. Therefore, we modify the Naive Bayes algorithm so that for each profile keyword $z_i$, the learner could give user relevant score according to:
 $$r = \frac{1}{n_i}\sum_{i=1}^{n_i} \log p(c|w_i)$$
 
-\subsubsection{Model Combination}
+\subsection{Model Combination}
 The Random Walk model works well for profile which users with this profile like connected with each other. For example, users in same companies or universities would like to follow each other. The Naive Bayes model works well for profile which users with this profile like to talk about same topics. For example, users like comic probably didn't know each other and follow each, but they tweet same words for same topic.
 
 There is a general approach to combine two different models together and generate better result for different kind of profile keyword.
