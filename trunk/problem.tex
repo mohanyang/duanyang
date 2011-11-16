@@ -8,10 +8,13 @@
 \title{Problem Formulation}
 \maketitle \else \fi
 
+\newcommand{\following}{\ensuremath{following}}
+\newcommand{\follower}{\ensuremath{follower}}
+
 \section{Problem Formulation}\label{sec:problem}
-We formulate the social network in twitter as a direct graph $G(V,E)$,
-a node $u$ represents a user in twitter and a direct edge $(u,v)$ indicates
-that user $u$ is following user $v$.
+We formulate the social network in twitter as a directed graph $G = (V,E)$.
+Each node $u \in V$ represents a user in twitter, and a directed edge $(u,v) \in E$ indicates
+user $u$ is following user $v$. The set of users who are following user $u$ is denoted as $\follower(u)$, and the set of users followed by $u$ is denoted as $\following(u)$. The size of these two sets are $|\follower(u)|$ and $|\following(u)|$, respectively.
 
 For each individual user $u$, we collected the user's tweets
 $T(u)=\{t_1, t_2, \cdots\}$.
