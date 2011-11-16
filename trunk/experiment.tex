@@ -9,13 +9,76 @@
 \maketitle \else \fi
 
 \section{Experiments}\label{sec:experiment}
-In this section, we test our different models on real dataset extracted from twitter. We name snowball algorithm as SA, random surfing algorithm as RSA, naive bayes algorithm as NBA and the combination of random surfing algorithm and naive bayes algorithm as CM. In the experiments, we use precision at the position $K$ to evaluate the accuracy of our ranking result. The precision at the position $K$ measures how many related user we ranked in top $K$ positions. 
+In this section, we test our different models on real dataset extracted from twitter. We name snowball algorithm as SA, random surfing algorithm as RSA, naive bayes algorithm as NBA and the combination of random surfing algorithm and naive bayes algorithm as CM. In the experiments, we use precision at the position $K$ to evaluate the accuracy of our ranking result. The precision at the position $K$ measures how many related user we ranked in top $K$ positions, thus it penalizes the model which performs poorly in top positions. Here we didn't use recall as one of our metrics since that we can hardly obtain the exactly number of users belong to our target category.
 
 \subsection{Experimental Setup}
+\textbf{User data:} The users used to train and evaluate our algorithm are collected from twitter during October, 2011. As described in section TODO, we collected TODO users from our seeds users. For each user, we also collected his at most 20 tweets in October, his profile and his followings. Thus, in total we have TODO tweets with more than TODO different words. Since user word pairs are very sparse and some word appeared in only a few users are not generalizable, we eliminate the words appeared less than 100 times and there is TODO word left.
+
+\textbf{Label data:} During our experiments, we mainly focus on predicting users from four categories, they are UCLA, Stanford, MIT and USC. The user belong to these four universities may highly connected with each other. Later in our experiments part, we will prove that some of our algorithm will still have good performance with dataset that is not highly connected. For category of each university, we use $80\%$ users with target keyword in their short bio as training data and erase the target keyword appeared in other $20\%$ users. In the evaluation process, we will also label top TODO results by human in order to obtain a more accuracy evaluation result.
 
 \subsection{Ranking Performance}
+In this part of the experiments, we use our label data and sort the users with respect to the estimated relevance given by our algorithm. We show the detailed precision curve (at different position) for different categories in Figure TODO.
+
+From Figure TODO we can see that the TODO and TODO performs the best at all most every positions. This fact demonstrates that TODO. Note that much of the improvement in the precision curve comes in the area near the position TODO to TODO. This is the area that we most care about, since that users in top positions have some features that is extremely easy to discover and users in these middle positions reflect the effectiveness of our algorithm more clearly.
+
+We also show some really related users and unrelated users ranked by our algorithm in top positions in Table TODO. This table reflects our program's strengths and weaknesses. The SA TODO. The RSA TODO. The NBA TODO. The CM TODO.
+
+Moreover, we show some of the features importance of NBA in table TODO. We ranked features according to their weight $\log p(c|w)$ and pick up the top $10$ words for different categories. From the table, we could learn some different attributes related to particular category of users. For example, UCLA students like ``dailybruin'' news, call themselves as ``bruins'' and lived near ``westwood''; USC students like news from ``usc annenberge'' and the idol statue in their university is ``Trojan''; MIT students live in ``Cambridge'' and there is famous ``media lab'' in their computer science department; Stanford students TODO.
+
+ucla
+1. dailybruin
+2. bruin
+3. bruins
+4. westwood
+5. neuheisel
+6. alumna
+7. wooden
+8. undergraduate
+9. midterms
+10. royce
+
+usc
+1. ascj
+2. uscedu
+3. annenberg
+4. uscpsycho
+5. uscannenberg
+6. ausc
+7. beattheirish
+8. trojan
+9. trojans
+10. atrojan
+
+mit
+1. sloan
+2. medialab
+3. cambridge
+4. joi
+5. kayak
+6. bostonupdate
+7. alums
+8. mechanical
+9. techreview
+10. edu
+
+stanford
+1. stanfordfball
+2. gostanford
+3. astanford
+4. gsb
+5. cardinal
+6. cantor
+7. tristanwalker
+8. auditorium
+9. alums
+10. freshmen
 
 \subsection{Ranking with Loss of Information}
+In this part of the experiments, we evaluate our different models with the loss of information. The loss of information means that during the training process, we erase some users profile in label data and treat these users as normal users without our target profile keywords. We test our program and plot the results for different amount of training data in Figure TODO.
+
+The results show that with the loss of information, the performance of SA algorithm and RSA algorithm falls down dramatically since that the prediction based in these algorithms mainly based on graph structure and link relationship between label users. The NBA TODO. As we expect that CM algorithm TODO.
+
+In our original dataset, the training users are likely to connected with each other since they are in same university. However, for other categories such as father, gamer or phd, users belong to such categories maybe not likely to connected with others in same category. When we erase the profile keyword in label data, the connection in label data become smaller and the structure may like other categories. The performance of our algorithms also demonstrate that our algorithms could be applied to different categories.
 
 \ifx \allfiles \undefined
 \end{document}
