@@ -80,9 +80,12 @@ The above two models works well in many situations. However, the tweets informat
 
 There are many machine learning algorithms which address this classification problem. We use the Naive Bayes classifier \cite{bayes} which is one of the most effective and efficient classification algorithm. The problem has two classes, $c = 1$ represents the event of belonging to $\mathcal{C}$, and $c = 0$ represents the event of not belonging to $\mathcal{C}$. For a specific user $u \in V$, the Naive Bayes classifier is defined as follows:
 $$\argmax_i p(c = i) \prod_{j=1}^m p(\phi_{u,j}|c = i)$$
-or equivalently calculate the value of the following expression:
-$$\log(p(c = 1)) - \log(p(c = 0)) + \sum_{j=1}^m (p(\phi_{u,j}|c = 1) - p(\phi_{u,j}|c = 0)).$$
-The larger the value (positive value), the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$.
+or equivalently determining the sign for $s_u$:
+\begin{eqnarray}\label{eq:bayes}
+s_u & = & \log(p(c = 1)) - \log(p(c = 0)) \nonumber \\
+    & + & \sum_{j=1}^m (p(\phi_{u,j}|c = 1) - p(\phi_{u,j}|c = 0)).
+\end{eqnarray}
+The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$. Finally, the users in $\mathcal{B}$ are still ranked based on the value of $s_u$.
 %In this algorithm, the learner attempts to construct a classifier for a set of labeled training examples.
 %There are several machine learning algorithms that address this problem. Here we use a Naive Bayes model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels.
 
