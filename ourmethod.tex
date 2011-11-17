@@ -12,6 +12,8 @@
 
 \maketitle \else \fi
 
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+
 \section{Our Approach}\label{sec:method}
 
 \subsection{Snowball Model}
@@ -76,18 +78,25 @@ The above two models works well in many situations. However, the tweets informat
 
 %Both two models described above works well in some situations. However, we ignore the tweets information and other profile information in our dataset. With the information extracted from our dataset, another general approach to our problem would be to view it as a classification task. We take users that already have some profile keyword as positive training examples, and treat other users as negative training examples. Then we could learn a classifier that predicts how likely that a user is going to have a profile keyword.
 
-There are many machine learning algorithms which address this classification problem. We use the Naive Bayes classifier \cite{bayes} which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of labeled training examples.
-%There are several machine learning algorithms that address this problem. Here we use a Naive Bayes model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels. 
-Assume that $X_1, X_2, \cdots X_n$ are training vectors $X_i=(x_1, x_2, \cdots, x_m)$ and each training vector has a class label $c$. The Bayes estimate $p(x_j|c)$ from the training examples to maximize the probability:
-$$\prod_i p(c)\prod_jp(x_j|c)$$
+There are many machine learning algorithms which address this classification problem. We use the Naive Bayes classifier \cite{bayes} which is one of the most effective and efficient classification algorithm. The problem has two classes, $c = 1$ represents the event of belonging to $\mathcal{C}$, and $c = 0$ represents the event of not belonging to $\mathcal{C}$. For a specific user $u \in V$, the Naive Bayes classifier is defined as follows:
+$$\argmax_i p(c = i) \prod_{j=1}^m p(\phi_{u,j}|c = i)$$
+or equivalently calculate the value of the following expression:
+$$\log(p(c = 1)) - \log(p(c = 0)) + \sum_{j=1}^m (p(\phi_{u,j}|c = 1) - p(\phi_{u,j}|c = 0)).$$
+The larger the value (positive value), the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$.
+%In this algorithm, the learner attempts to construct a classifier for a set of labeled training examples.
+%There are several machine learning algorithms that address this problem. Here we use a Naive Bayes model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels.
+
+%Assume that $X_1, X_2, \cdots X_n$ are training vectors $X_i=(x_1, x_2, \cdots, x_m)$ and each training vector has a class label $c$. The Bayes estimate $p(x_j|c)$ from the training examples to maximize the probability:
+%$$\prod_i p(c)\prod_jp(x_j|c)$$
 
 %In our paper, we apply this Naive Bayes method to learn the probability that user $u_j$ has the profile $z_i$. And return the sorted list according the probability.
 
-However, the dataset for this classification problem has several disadvantages. Firstly, the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. Secondly, the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks. We modify the Naive Bayes algorithm to calculate the relevant score according to the following equation:
+However, the dataset for this classification problem has several disadvantages. Firstly, the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. Secondly, the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks. 
 %The first is that the class is imbalance, for each profile $z_i$, there will be a very small fraction of the users in the network and learning is particularly hard in domains with high class imbalance. The second challenge is that there are huge amount of features. There are lots different words appeared in users tweets and also typos and connected words. Therefore, we modify the Naive Bayes algorithm so that for each profile keyword $z_i$, the learner could give user relevant score according to:
-\begin{equation}
-r = \frac{1}{n_i}\sum_{i=1}^{n_i} \log p(c|w_i)
-\end{equation}
+%We modify the Naive Bayes algorithm to calculate the relevant score according to the following equation:
+%\begin{equation}
+%r = \frac{1}{n_i}\sum_{i=1}^{n_i} \log p(c|w_i)
+%\end{equation}
 
 \subsection{Model Combination}
 
