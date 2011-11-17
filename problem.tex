@@ -13,10 +13,10 @@
 
 \section{Problem Formulation}\label{sec:problem}
 We formulate the social network in twitter as a directed graph $G = (V,E)$.
-Each node $u \in V$ represents a user in twitter, and a directed edge $(u,v) \in E$ indicates
+Each node $u \in V = \{1, 2, \cdots, n\}$ represents a user in twitter, and a directed edge $(u,v) \in E$ indicates
 user $u$ is following user $v$. The set of users who are following user $u$ is denoted as $\follower(u)$, and the set of users followed by $u$ is denoted as $\following(u)$. The size of these two sets are $|\follower(u)|$ and $|\following(u)|$, respectively.
 
-For each user $u$, let the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, w_2, \cdots\}$. Then $T_u$ can be viewed as a bag of words from $W$. Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0.
+For each user $u$, let the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$. Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0.
 %Here $\phi_{u, i} = 1$ indicates that word $w_i$ appears in $u$'s tweets,
 %and $\phi_{u, i} = 0$ indicates that word $w_i$ does not appear in $u$'s tweets.
 %To simplify our problem, we ignore the number of occurrences of each word $w_i$.
