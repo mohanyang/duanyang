@@ -80,7 +80,9 @@ The above two models works well in many situations. However, the tweets informat
 
 There are many machine learning algorithms which address this classification problem. We use the Naive Bayes classifier \cite{bayes} which is one of the most effective and efficient classification algorithm. The problem has two classes, class 1 and class 0. Users in class 1 belong to $\mathcal{C}$, while the users in class 0 do not belong to $\mathcal{C}$. $c = i$ represents the event that the class is $i$. 
 
-For each user $u$, let the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$. Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0. The Naive Bayes classifier for $u$ is defined as follows:
+For each user $u$, let $T_u$ be the collection of $u$'s tweets, location and short biography. The word set for corpus $\bigcup_{u = 1}^n T_u$ is $W = \{w_1, \cdots, w_m\}$.
+%the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$.
+Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0. The Naive Bayes classifier for $u$ is defined as follows:
 $$\argmax_i p(c = i) \prod_{j=1}^m p(\phi_{u,j}|c = i)$$
 or equivalently determines the sign for $s_u$:
 \begin{eqnarray}\label{eq:bayes}
