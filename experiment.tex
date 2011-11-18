@@ -3,29 +3,54 @@
 \usepackage{booktabs}
 \usepackage{multirow}
 \usepackage{graphicx}
+\usepackage{subfigure}
 
 \begin{document}
 \title{Method}
 \maketitle \else \fi
 
+\section{Data Collection}\label{sec:datacollection}
+We selected 20 seed users from each of the four universities, including UCLA, USC, Stanford and MIT. User profile (id, location, screen name, number of followings and followers, and a short biography) of these seed users was crawled using the Twitter API. Starting from these seed users, a two-step random walk is performed to retrieve their followers and their followers' followers. If a new user from these four universities is discovered during the procedure, this user is marked as a seed user and another two-step random walk starting from this user is performed. The crawler has collected more than 540,000 users and 780,000,000 following relations. It has also collected the most recent 20 tweets for each user.
+
+\subsection{Data Analysis}
+Keywords are extracted from user profiles. Keyword frequencies are calculated, and some keywords are manually labeled into three categories, namely location (CA, Los Angeles, NY, etc.), occupation (CEO, writer, blogger, student, etc.) and affiliation (UCLA, USC, Stanford, MIT, Google, etc.). Following is some statistics about the users in different universities (a subset of affiliation).
+
+\subsubsection{Who follows whom on twitter?}
+Table 1 shows the average numbers of followings in different universities with respect to users in different universities. 'Other' represents that the user does not mention any of these four universities in his biography. For example, the third row and second column means 38.17 followings of a UCLA user is in other universities on average. It is shown that the number of followers in the same university is ten times larger than that in different universities. However, this only counts for 5\% among all a user's followers. A possible reason might be that many users do not write their universities in their biographies.
+
 \section{Experiments}\label{sec:experiment}
 In this section, we test our different models on real dataset extracted from twitter. We name snowball algorithm as SA, random surfing algorithm as RSA, naive bayes algorithm as NBA and the combination of random surfing algorithm and naive bayes algorithm as CM. In the experiments, we use precision at the position $K$ to evaluate the accuracy of our ranking result. The precision at the position $K$ measures how many related user we ranked in top $K$ positions, thus it penalizes the model which performs poorly in top positions. Here we didn't use recall as one of our metrics since that we can hardly obtain the exactly number of users belong to our target category.
 
 \subsection{Experimental Setup}
-\textbf{User data:} The users used to train and evaluate our algorithm are collected from twitter during October, 2011. As described in section TODO, we collected TODO users from our seeds users. For each user, we also collected his at most 20 tweets in October, his profile and his followings. Thus, in total we have TODO tweets with more than TODO different words. Since user word pairs are very sparse and some word appeared in only a few users are not generalizable, we eliminate the words appeared less than 100 times and there is TODO word left.
+\textbf{User data:} The users used to train and evaluate our algorithm are collected from twitter during October, 2011. As described in section \ref{sec:datacollection}, we collected $540,000$ users from our seeds users. For each user, we also collected his at most $20$ tweets in October, his profile and his followings. Thus, in total we have $15,321,508$ tweets with more than $3,143,115$ different words. Since user word pairs are very sparse and some word appeared in only a few users are not generalizable, we eliminate the words appeared less than $100$ times and there is about $20,000$ word left.
 
-\textbf{Label data:} During our experiments, we mainly focus on predicting users from four categories, they are UCLA, Stanford, MIT and USC. The user belong to these four universities may highly connected with each other. Later in our experiments part, we will prove that some of our algorithm will still have good performance with dataset that is not highly connected. For category of each university, we use $80\%$ users with target keyword in their short bio as training data and erase the target keyword appeared in other $20\%$ users. In the evaluation process, we will also label top TODO results by human in order to obtain a more accuracy evaluation result.
+\textbf{Label data:} During our experiments, we mainly focus on predicting users from four categories, they are UCLA, Stanford, MIT and USC. The user belong to these four universities may highly connected with each other. Later in our experiments part, we will prove that some of our algorithm will still have good performance with dataset that is not highly connected. For category of each university, we use $80\%$ users with target keyword in their short bio as training data and erase the target keyword appeared in other $20\%$ users.
+
+\textbf{Human label data:} TODO. In the evaluation process, we will also label top $100$ results for UCLA category by human in order to obtain a more accuracy evaluation result. We will discuss it later.
 
 \subsection{Ranking Performance}
-In this part of the experiments, we use our label data and sort the users with respect to the estimated relevance given by our algorithm. We show the detailed precision curve (at different position) for different categories in Figure TODO.
+In this part of the experiments, we use our label data and sort the users with respect to the estimated relevance given by our algorithm. We show the detailed precision curve (at different position) on label data for different categories in Figure \ref{fig:e1}.
 
-From Figure TODO we can see that the TODO and TODO performs the best at all most every positions. This fact demonstrates that TODO. Note that much of the improvement in the precision curve comes in the area near the position TODO to TODO. This is the area that we most care about, since that users in top positions have some features that is extremely easy to discover and users in these middle positions reflect the effectiveness of our algorithm more clearly.
+\begin{figure*}[h]
+\centering
+\subfigure[UCLA]{\includegraphics[width=0.45\textwidth]{experiment/e1.ucla.eps}}
+\subfigure[MIT]{\includegraphics[width=0.45\textwidth]{experiment/e1.mit.eps}}
+\\
+\subfigure[Stanford]{\includegraphics[width=0.45\textwidth]{experiment/e1.stanford.eps}}
+\subfigure[USC]{\includegraphics[width=0.45\textwidth]{experiment/e1.usc.eps}}
+\caption{Precision@K for different category.}
+\label{fig:e1}
+\end{figure*}
 
-We also show some really related users and unrelated users ranked by our algorithm in top positions in Table TODO. This table reflects our program's strengths and weaknesses. The SA TODO. The RSA TODO. The NBA TODO. The CM TODO.
+From Figure \ref{fig:e1} we can see that the NBA and CM performs the best at almost every positions. This fact due to the reason that the label data is automated generated by computer. User without category keyword or without large amount of related word will be negative examples in the evaluation. Compare NBA and CM, opposite to our expectation that NBA performs better than CM that is because RSA seriously affected the accuracy of training labels in CM in our computer evaluation system.
+
+The RSA performs better than SA in MIT and USC category, and comparable with SA in Stanford category. But it performs worse than SA in UCLA category, especially in top positions. When we look insight the ranking result, we find that RSA is not as bad as it showed in the figure. TODO(why RSA is better). Moreover, note that much of the improvement in the precision curve in MIT and USC category come in the area after top $10$ positions. This is the area that we most care about, since that users in top position have some features that is easy to discover and users in these middle or tail positions reflect the effectiveness of our algorithm more clearly.
+
+TODO, We also show some really related users and unrelated users ranked by our algorithm in top positions in Table TODO. This table reflects our program's strengths and weaknesses. The SA TODO. The RSA TODO. The NBA TODO. The CM TODO.
 
 Moreover, we show some of the features importance of NBA in table \ref{tab:keyword}. We ranked features according to their weight $\log p(c|w)$ and pick up the top $10$ words for different categories. From the table, we could learn some different attributes related to particular category of users. For example, UCLA students like ``dailybruin'' news, call themselves as ``bruins'' and lived near ``westwood''; USC students like news from ``usc annenberge'' and the idol statue in their university is ``Trojan''; MIT students live in ``Cambridge'' and there is famous ``media lab'' in their computer science department; Stanford students are glad to talking about their athletic team using nick name ``cardinal''.
 
-\begin{table*}[t]
+\begin{table*}[h]
 \centering
 \begin{tabular}{|l|l|}
 \hline
@@ -59,17 +84,3 @@ In our original dataset, the training users are likely to connected with each ot
 %We will analysis the tweet keywords for each user, and provide a metric to evaluate the tweets similarity between two users. We will also compare the interest difference between users in different universities.
 %We will quantify two users' closeness using their tweet and reply (regarding retweet as a kind of reply) behavior data. Our model is similar to the model used in predicting a chess game result based on two players' past campaign results \cite{elo1986rating}.
 %We will propose an algorithm for extracting a user's hidden profile. Each edge will be weighted by the closeness and tweets similarity of the corresponding two users. The algorithm performs a random walk on the weighted graph to collect all possible hidden profile for a specific user.
-
-\subsection{Data Collection}
-We selected 20 seed users from each of the four universities, including UCLA, USC, Stanford and MIT. User profile (id, location, screen name, number of followings and followers, and a short biography) of these seed users was crawled using the Twitter API. Starting from these seed users, a two-step random walk is performed to retrieve their followers and their followers' followers. If a new user from these four universities is discovered during the procedure, this user is marked as a seed user and another two-step random walk starting from this user is performed. The crawler has collected more than 540,000 users and 780,000,000 following relations. It has also collected the most recent 20 tweets for each user.
-
-\subsection{Data Analysis}
-Keywords are extracted from user profiles. Keyword frequencies are calculated, and some keywords are manually labeled into three categories, namely location (CA, Los Angeles, NY, etc.), occupation (CEO, writer, blogger, student, etc.) and affiliation (UCLA, USC, Stanford, MIT, Google, etc.). Following is some statistics about the users in different universities (a subset of affiliation).
-
-\subsubsection{Who follows whom on twitter?}
-Table 1 shows the average numbers of followings in different universities with respect to users in different universities. 'Other' represents that the user does not mention any of these four universities in his biography. For example, the third row and second column means 38.17 followings of a UCLA user is in other universities on average. It is shown that the number of followers in the same university is ten times larger than that in different universities. However, this only counts for 5\% among all a user's followers. A possible reason might be that many users do not write their universities in their biographies.
-
-%Maybe we don't need this
-
-%\subsubsection{Who replies/retweets to whom on twitter?}
-%More than 75,000 replies/retweets are collected. 86\% of them are between a user in these four universities and a user in affiliation "Other". For the rest replies/retweets, 98\% of them are between users in the same universities.
