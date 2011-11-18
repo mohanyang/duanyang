@@ -101,12 +101,12 @@ However, the dataset for this classification problem has two disadvantages. One 
 %r = \frac{1}{n_i}\sum_{i=1}^{n_i} \log p(c|w_i)
 %\end{equation}
 
-\subsection{Model Combination}
+\subsection{Co-training Model}
 
 %The random walk model works well for profile which users with this profile like connected with each other. For example, users in same companies or universities would like to follow each other. The Naive Bayes model works well for profile which users with this profile like to talk about same topics. For example, users like comic probably didn't know each other and follow each, but they tweet same words for same topic.
 
 %There is a general approach to combine two different models together and generate better result for different kind of profile keyword.
-The random walk model and Naive Bayes model focus on different perspective of twitter networks: the former focus on the network structure level, and the later focus on the tweets information level. Both of them provide a good enough ranking for the training data, while the perspectives of the two models are conditionally independent given the ranking. A more powerful approach called co-training \cite{cotraining} combines the two models together, and iteratively reinforce the result of one model by the the result of the other model.
+The random walk model and Naive Bayes model focus on different perspective of twitter networks: the former focus on the network structure level, and the later focus on the tweets information level. Both of them provide reasonably well rankings for the training data, while the perspectives of these two models are conditionally independent given the ranking. A more powerful approach called co-training \cite{cotraining} combines the two models together, and iteratively reinforce the result of one model by the the result of the other model.
 
 %Because our two models (i) based on different prospective of user behaviors; (ii) each training method is sufficient to train a good ranker when we have enough training data; (iii) two prospective of user behaviors are conditionally independent given the class. So we use co-training \cite{cotraining} method to combine two approaches.
 
