@@ -1,3 +1,13 @@
+par(mar=c(0, 0, 0, 0))
+d <- c(244, 64, 118, 51, 74)
+d_labels <- round(d/sum(d) * 100, 1)
+d_labels <- paste(d_labels, "%", sep="")
+pie(d, col=rainbow(length(d)), labels=d_labels, cex=0.8)
+legend(0.9,0.8, c("ActiveUCLA","InactiveUCLA",
+"Inactive","Intent","Negative"), cex=0.8,fill=rainbow(length(d)))
+
+----------------------------------------------------------------------------
+
 report_data <- read.table("D:/research/twitter/cs246/ucla/loss of information/report.txt", header=T, sep="\t")
 
 par(mar=c(4.2, 4.2, 1, 1))
