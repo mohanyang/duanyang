@@ -12,6 +12,10 @@
 \section{Discussion}\label{sec:discussion}
 During our labeling process, we find several interesting results reflected by our algorithms. We distributed top 100 users of UCLA category returned by different algorithms and into several categories and described as follows.
 
+
+However, the dataset for this classification problem has two disadvantages. One disadvantage is the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. The other disadvantage is the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks.
+
+
 \subsection{User classification}
 The users are classified into $6$ categories manually, they are active users with related bio, tweets or photos (ActiveUCLA); inactive users belongs to UCLA (InactiveUCLA); inactive users not belongs to UCLA (Inactive); user intent miss match (Intent); and user not belongs to UCLA (Negative). The classification result is in Figure \ref{fig:userclass}.
 
@@ -36,4 +40,4 @@ These kinds of intent mismatch contribute to $9.3\%$ discrepancies in the data. 
 
 \ifx \allfiles \undefined
 \end{document}
-\fi
+\fi 
