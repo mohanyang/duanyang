@@ -16,7 +16,7 @@
 
 \section{Our Approach}\label{sec:method}
 
-\subsection{Snowball Model}
+\subsection{Snowball Algorithm}
 %In considering the operational models for the extraction of a profile keyword of a user through a social network $G$, we will first treat this problem as an information influence spread processing.
 
 Given a category $\mathcal{C}$ and a keyword $z_{\mathcal{C}}$ which best describes $\mathcal{C}$, each user $u \in V$ has an active score $s_u$ representing the likelihood that $u$ belongs to category $\mathcal{C}$. If $s_u \geq 1$, user $u$ is \emph{active}, indicating $u$ belongs to $\mathcal{C}$; otherwise, $u$ is \emph{inactive}. The snowball algorithm calculates $s_u$ based on the linear threshold model proposed in \cite{snowball1,snowball2}, which captures the influence propagation process in the network.
@@ -53,7 +53,7 @@ If the new active score $s_u$ is no less than 1, then user $u$ becomes active. A
 \end{algorithm}
 %------------------------------------------------
 
-\subsection{Random Walk Model}
+\subsection{Bidirectional Snowball Algorithm}
 
 The underlying graph structure of twitter social network is similar to that of the Web graph, where a user in twitter corresponds to a page in the Web, and a following relation between two users corresponds to a directed hyperlink between two pages. Existing methods like PageRank\cite{page1999pagerank}, TrustRank\cite{gyngyi2004combating} and random walks with restarts\cite{tong2006fast} are popular random walk based methods for ranking nodes in the Web graph. Our second approach uses a variant of TrustRank to calculate the relevance score $s_u$ for each user $u$. The idea is user $v$ positively contributes to $u$'s relevance score if $v$ is $u$'s following, and user $w$ also positively contributes to $u$'s relevance score if $w$ is $u$'s follower.
 
@@ -72,24 +72,28 @@ $M_P$ and $M_Q$ are $n \times n$ transition matrices described above. Vector $T$
 
 The initial value of $p_u$ and $q_u$ is ${1 \over |\mathcal{A}|}$ for $u \in \mathcal{A}$, otherwise it is 0. Each iteration updates the value of $P$ and $Q$ based on Eqn.~(\ref{eq:randomwalk}), and normalizes vector $P$ and $Q$ into unit vectors. Finally, the users are ranked according to the relevance score $s_u = p_u q_u$ after convergence, which is a combination of relevance to category $\mathcal{C}$ from both following and follower directions.
 
-\subsection{Naive Bayes Model}
+\subsection{Naive Bayes Algorithm}
 
-The above two models works well in many situations. However, the tweets information are ignored in these two approaches. Our third approach builds a classifier using the tweets information, and predicts how likely a user in $\mathcal{B}$ belongs to category $\mathcal{C}$. The users in $\mathcal{A}$ are positive training examples, and the users in $\mathcal{B}$ are negative training examples.
+The above two algorithms works well in many situations. However, the tweets information are ignored in these two approaches. Our third approach builds a classifier using the tweets information, and predicts how likely a user in $\mathcal{B}$ belongs to category $\mathcal{C}$. The users in $\mathcal{A}$ are positive training examples, and the users in $\mathcal{B}$ are negative training examples.
 
 %Both two models described above works well in some situations. However, we ignore the tweets information and other profile information in our dataset. With the information extracted from our dataset, another general approach to our problem would be to view it as a classification task. We take users that already have some profile keyword as positive training examples, and treat other users as negative training examples. Then we could learn a classifier that predicts how likely that a user is going to have a profile keyword.
 
-There are many machine learning algorithms which address this classification problem. We use the Naive Bayes classifier \cite{frank2000technical} which is one of the most effective and efficient classification algorithm. The problem has two classes, class 1 and class 0. Users in class 1 belong to $\mathcal{C}$, while the users in class 0 do not belong to $\mathcal{C}$. $c = i$ represents the event that the class is $i$.
+There are many machine learning algorithms which address this classification problem. We use the naive Bayes classifier \cite{frank2000technical} which is one of the most effective and efficient classification algorithm. The problem has two classes, class 1 and class 0. Users in class 1 belong to $\mathcal{C}$, while the users in class 0 do not belong to $\mathcal{C}$. $c = i$ represents the event that the class is $i$.
 
-For each user $u$, let $T_u$ be the collection of $u$'s tweets, location and short biography. The word set for corpus $\bigcup_{u = 1}^n T_u$ is $W = \{w_1, \cdots, w_m\}$.
+For each user $u$, let $T_u$ be the collection of $u$'s tweets, location and biography. The word set for corpus $\bigcup_{u = 1}^n T_u$ is $W = \{w_1, \cdots, w_m\}$.
 %the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$.
-Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0. The Naive Bayes classifier for $u$ is defined as follows:
-$$\argmax_i p(c = i) \prod_{j=1}^m p(\phi_{u,j}|c = i)$$
-or equivalently determines the sign for $s_u$:
-\begin{eqnarray}\label{eq:bayes}
+$\mathbf{1}_{T_u}(w_i)$ is the indicator function of $T_u$, where $\mathbf{1}_{T_u}(w_i)$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0. Let $w_i = 1$ represents the event that word $w_i$ occurs, and $w_i = 0$ represents the event that word $w_i$ does not occur.
+
+The naive Bayes classifier for $u$ tries to find $i \in \{0, 1\}$, such that
+$$p(c=i | w_1 = \mathbf{1}_{T_u}(w_1), \cdots, w_m = \mathbf{1}_{T_u}(w_m))$$
+is maximized, or equivalently maximize
+$$p(c = i) \prod_{j=1}^m p(w_j = \mathbf{1}_{T_u}(w_j) | c = i).$$
+As the problem has only two classes, it is equivalent to determining the sign for $s_u$:
+\begin{eqnarray}
 s_u & = & \log(p(c = 1)) - \log(p(c = 0)) \nonumber \\
-    & + & \sum_{j=1}^m (p(\phi_{u,j}|c = 1) - p(\phi_{u,j}|c = 0)).
+    & + & \sum_{j=1}^m (p(w_j = \mathbf{1}_{T_u}(w_j)|c = 1) - p(w_j = \mathbf{1}_{T_u}(w_j)|c = 0)). \nonumber
 \end{eqnarray}
-The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$. Finally, the users in $\mathcal{B}$ are still ranked based on the value of $s_u$.
+The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$. The value of $p(c = 1)$ is calculated as the fraction of positive training examples, and the value of $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 1)$ is calculated as the number of positive examples such that $w_j$ appears (does not appear) in $T_u$ divided by the number of positive examples if $\mathbf{1}_{T_u}(w_j) = 1$ (if $\mathbf{1}_{T_u}(w_j) = 0$). The calculation of $p(c = 0)$ and $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 0)$ are similar. Finally, the users in $\mathcal{B}$ are ranked based on the value of $s_u$.
 %In this algorithm, the learner attempts to construct a classifier for a set of labeled training examples.
 %There are several machine learning algorithms that address this problem. Here we use a Naive Bayes model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels.
 
@@ -104,18 +108,18 @@ The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $
 %r = \frac{1}{n_i}\sum_{i=1}^{n_i} \log p(c|w_i)
 %\end{equation}
 
-\subsection{Co-training Model}
+\subsection{Co-training Algorithm}
 
 %The random walk model works well for profile which users with this profile like connected with each other. For example, users in same companies or universities would like to follow each other. The Naive Bayes model works well for profile which users with this profile like to talk about same topics. For example, users like comic probably didn't know each other and follow each, but they tweet same words for same topic.
 
 %There is a general approach to combine two different models together and generate better result for different kind of profile keyword.
-The random walk model and Naive Bayes model focus on different perspective of twitter networks: the former focus on the network structure level, and the later focus on the tweets information level. Both of them provide reasonably well rankings for the training data, while the perspectives of these two models are conditionally independent given the ranking. A more powerful approach called co-training \cite{cotraining} combines the two models together, and iteratively reinforce the result of one model by the the result of the other model.
+The bidirectional snowball algorithm and naive Bayes algorithm focus on different perspective of twitter networks: the former focus on the network structure level, and the later focus on the tweets information level. Both of them provide reasonably well rankings for the training data, while the perspectives of these two algorithms are conditionally independent given the ranking. A more powerful approach called co-training \cite{cotraining} combines the two algorithms together, and iteratively reinforce the result of one algorithm by the the result of the other algorithm.
 
 %Because our two models (i) based on different prospective of user behaviors; (ii) each training method is sufficient to train a good ranker when we have enough training data; (iii) two prospective of user behaviors are conditionally independent given the class. So we use co-training \cite{cotraining} method to combine two approaches.
 
-Let $l$ are $k$ be positive parameters, and $k > l$. During each iteration, top $l$ users generated by the Naive Bayes model are merged into set $\mathcal{A}$ in the new iteration of random walk model, and the top $l$ users generated by the new random walk iteration is considered as positive training examples in the Naive Bayes model. The iteration is executed until the top $k$ users generated by random walk model and Naive Bayes model are the same.
+Let $l$ are $k$ be positive integers, and $k > l$. During each iteration, top $l$ users generated by the naive Bayes algorithm are merged into set $\mathcal{A}$ in the bidirectional snowball algorithm, and the top $l$ users generated by the new bidirectional snowball algorithm is considered as positive training examples in the naive Bayes algorithm. The iteration is executed until the top $k$ users generated by the bidirectional snowball algorithm and naive Bayes algorithm are the same. The result of the last execution of the naive Bayes algorithm is used as the final result of the co-training algorithm.
 
-We arrive at Algorithm 4 that iteratively computes the vector $P$, $Q$ as well as the relevant score $s_u$.
+%We arrive at Algorithm 4 that iteratively computes the vector $P$, $Q$ as well as the relevant score $s_u$.
 %I will write sudo code here
 
 \ifx \allfiles \undefined
