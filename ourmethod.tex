@@ -98,7 +98,6 @@ The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $
 
 %In our paper, we apply this Naive Bayes method to learn the probability that user $u_j$ has the profile $z_i$. And return the sorted list according the probability.
 
-However, the dataset for this classification problem has two disadvantages. One disadvantage is the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. The other disadvantage is the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks.
 %The first is that the class is imbalance, for each profile $z_i$, there will be a very small fraction of the users in the network and learning is particularly hard in domains with high class imbalance. The second challenge is that there are huge amount of features. There are lots different words appeared in users tweets and also typos and connected words. Therefore, we modify the Naive Bayes algorithm so that for each profile keyword $z_i$, the learner could give user relevant score according to:
 %We modify the Naive Bayes algorithm to calculate the relevant score according to the following equation:
 %\begin{equation}
