@@ -12,10 +12,6 @@
 \section{Discussion}\label{sec:discussion}
 During our labeling process, we find several interesting results reflected by our algorithms. We distributed top 100 users of UCLA category returned by different algorithms and into several categories and described as follows.
 
-
-However, the dataset for this classification problem has two disadvantages. One disadvantage is the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. The other disadvantage is the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks.
-
-
 \subsection{User classification}
 The users are classified into $6$ categories manually, they are active users with related bio, tweets or photos (ActiveUCLA); inactive users belongs to UCLA (InactiveUCLA); inactive users not belongs to UCLA (Inactive); user intent miss match (Intent); and user not belongs to UCLA (Negative). The classification result is in Figure \ref{fig:userclass}.
 
@@ -37,6 +33,18 @@ These kinds of intent mismatch contribute to $9.3\%$ discrepancies in the data. 
 
 \subsection{Precision of active user}
 
+Noticed that there are about $30\%$ users are inactive users. Those users published several tweets after they register and didn't publish any more tweets during recent three months. In real cases, we don't want to see these inactive users since we don't expect that they will provide more information or business opportunity in the future. So that we evaluate our different approaches with inactive user as a negative example and the result is in Figure \ref{fig:activeprecision}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.45\textwidth]{experiment/ap.eps}
+\caption{Active user precision curve for UCLA category.}
+\label{fig:activeprecision}
+\end{figure}
+
+Unexpected that SA has the best result and NBA performs the worst in top positions. We look at top users returned by NBA, and found that users such as ``bruinmarketing'' ranked at higher positions by NBA. It seems that ``bruinmarketing'' is in UCLA category, but this user has no tweets among this year. Similarly, some users only mentioned word ``bruin'' in their short bio and ranked higher in NBA turns out to be inactive users.
+
+Admittedly, we concern that there still exists some disadvantages to treat this problem as classification problem. One disadvantage is the class is unbalanced. The fraction of positive training samples is too small, which makes the learning particularly difficult. The other disadvantage is the number of features is very large, which is due to the diversity of words people used in their tweets and frequent appearance of typos and hyphen marks.
 
 \ifx \allfiles \undefined
 \end{document}
