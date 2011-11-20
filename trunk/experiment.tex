@@ -64,7 +64,7 @@ Stanford & stanfordfball, gostanford, astanford, gsb, cardinal, cantor, tristanw
 \end{table*}
 
 \subsection{Ranking with Loss of Information}
-In this part of the experiments, we evaluate our different models with the loss of information. The loss of information means that during the training process, we erase some users profile in label data and treat these users as normal users without our target profile keywords. We test our program and plot the results for different amount of training data in Figure \ref{fig:e3}.
+In this part of the experiments, we evaluate our different algorithms with the loss of information. The loss of information means that during the training process, we erase more users' profile in label data and treat these users as normal users without our target profile keywords. We test our program and plot the precision of the top 100 users for different amount of training data in Figure \ref{fig:e3}.
 
 \begin{figure}[h]
 \centering
@@ -73,21 +73,13 @@ In this part of the experiments, we evaluate our different models with the loss 
 \label{fig:e3}
 \end{figure}
 
-The results show that with the loss of information, the performance of RSA falls down dramatically. It also suggests that with few positive training examples, training users in UCLA becomes less connected. The poor graph structure influence the performance of RSA a lot.
-Noticed that NBA still have a very good result with $30\%$ positive training examples. Within those percentage of training users, we could already detect the topic among the tweets published by users with UCLA category.
+The results show that with the loss of information, the performance of BSA falls down dramatically. It also suggests that with few positive training examples, training users in UCLA becomes less connected. The poor graph structure has a bad impact on the performance of BSA.
+The NBA still have a very good result with $20\%$ positive training examples. Within those percentage of training users, we could already detect the topic among the tweets published by users belongs to UCLA category. When we look inside the ranking result, the top users returned by BSA and NBA are very accurate. So that the amount of positive training examples does not affect the ranking result of CA very much.
 
-As our expectation, although the ranking of users have little change in CM results, the precision@100 didn't change. When we look inside the ranking result, the top results returned by RSA and NBA are very accurate. So the amount of positive training examples does not affect the ranking result very much.
+Noticed that sometimes with less positive training examples, our algorithms could achieve better prediction results. That is because when we erase keyword in user's profile, the user is still in our dataset. The total number of users belong to UCLA category in evaluation data increased. So that the precision for top 100 users will be higher.
 
-In our original dataset, the training users are likely to connected with each other since they are in same university. However, for other categories such as father, gamer or phd, users belong to such categories maybe not likely to connected with others in same category. When we erase the profile keyword in label data, the connection in label data become smaller and the structure may like other categories. The performance of our algorithms also demonstrate that our algorithms could be applied to different categories.
+In our original dataset, the training users are likely to connected with each other since they are in same university. However, for other categories such as father, gamer or phd, users belong to such categories maybe not likely to connected with others in the same category. When we erase the profile keyword in label data, the connection in label data become smaller and the graph structure may like these categories. The performance of our algorithms on UCLA category also demonstrate that our algorithms could be applied to different categories.
 
 \ifx \allfiles \undefined
 \end{document}
 \fi
-
-%I think we need rewrite this part. Thanks.
-
-%Our crawler will begin with Twitter users from four universities including UCLA, USC, Stanford and MIT, and perform a two-step random walk starting from these users to obtain a larger set of different background users. Every user's profile, followers and followings information will be retrieved. The crawler will also retrieve these users' tweets posted after a specific time.
-%We will analysis the number of followers, followings, tweets and retweets for each user, and quantify a user's influence on these metrics using a PageRank like mechanism.
-%We will analysis the tweet keywords for each user, and provide a metric to evaluate the tweets similarity between two users. We will also compare the interest difference between users in different universities.
-%We will quantify two users' closeness using their tweet and reply (regarding retweet as a kind of reply) behavior data. Our model is similar to the model used in predicting a chess game result based on two players' past campaign results \cite{elo1986rating}.
-%We will propose an algorithm for extracting a user's hidden profile. Each edge will be weighted by the closeness and tweets similarity of the corresponding two users. The algorithm performs a random walk on the weighted graph to collect all possible hidden profile for a specific user.
