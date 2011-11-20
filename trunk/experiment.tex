@@ -34,7 +34,7 @@ Twenty seed users were selected from each of the four universities, including UC
 \subsection{Ranking Performance}
 In this part of the experiments, we use our label data and sort the users with respect to the estimated relevance given by our algorithm. We show the detailed precision curve (at different position) on label data for different categories in Figure \ref{fig:e1}.
 
-\begin{figure*}[h]
+\begin{figure*}[htb!]
 \centering
 \subfigure[UCLA]{\includegraphics[width=0.45\textwidth]{experiment/e1.ucla.eps}}
 \subfigure[MIT]{\includegraphics[width=0.45\textwidth]{experiment/e1.mit.eps}}
@@ -59,7 +59,7 @@ In addition to the experiment results on label data, Figure \ref{fig:e2} represe
 
 Moreover, we show some of the features importance of NBA in table \ref{tab:keyword}. We ranked features according to their weight $\log p(c|w)$ and pick up the top $10$ words for different categories. From the table, we could learn some different attributes related to particular category of users. For example, UCLA students like ``dailybruin'' news, call themselves as ``bruins'' and lived near ``westwood''; USC students like news from ``usc annenberge'' and the idol statue in their university is ``Trojan''; MIT students live in ``Cambridge'' and there is famous ``media lab'' in their computer science department; Stanford students are glad to talking about their athletic team using nick name ``cardinal''.
 
-\begin{table*}[h]
+\begin{table*}[htb!]
 \centering
 \begin{tabular}{|l|l|}
 \hline
