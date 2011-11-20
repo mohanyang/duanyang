@@ -1,23 +1,8 @@
 
 \section{Related Work}\label{sec:related-work}
-Threshold model
 
-Random Walk Based 
+Most research works on Twitter investigate the network structure and the spread of information. Weng J. et al. purposed Twitter rank \cite{twitterrank} examined the topic-specific influential on social network service. Welch, M.J. et al. conduct analysis on retweet links shows that the transitivity of topic relevance is better preserved over retweet links than general following relationship \cite{welch2011topical}. Wu, S. et al. studied the homophily between users within same categories, such as celebrities listen to celebrities, while media listen to media \cite{wu2011says}. Other researches focus on analysing large amount of tweets. Kwak et al. conduct experiments that analysis topic trending in Twitter \cite{kwak2010twitter}. They discovered that most tweets posted everyday are related to news and hashtags are good indicators to detect events and trends. 
 
-\cite{backstrom2011supervised}
+The research work \cite{wu2011says} shows that users within same categories are likely to follow each other. Similar, Java A. et al. in \cite{java2007we} present their observations of the microblogging phenomena find that users talk about their daily activities, share information, and connect others with similar intentions. Beside Twitter, Yang S.H. shows that information contained in interest networks and friendship networks is highly correlated in other social network services \cite{yang2011like}. Given a user's tweets information and friendship, build a system that reconstruct his profile or interesting is very helpful for personalize information access and advertisement targeting.
 
-\cite{elo1978rating}
-
-\cite{kwak2010twitter}
-
-\cite{welch2011topical}
-
-\cite{wu2011says}
-
-\cite{yang2011like}
-
-\cite{java2007we}
-
-
-
-Granovetter and Schelling were among the first researchers to propose models that capture such a influence propagation process; their approach was based on use of node-specific thresholds \cite{snowball1}, \cite{snowball2}. 
+One way for user profile reconstruction is calculating how user related to a given category in the graph. It is similar to computing node proximities in large graphs. There are some related works use random walk as their basic model. Tong H. et al. presented algorithm that find nodes in a center-piece subgraph in \cite{centerpiece}. The author also presented algorithm that compute how closely related are two nodes in a graph in \cite{fastrankdomwalk}. Other solutions aim learning to rank nodes for target category. The most recent work \cite{backstrom2011supervised} conducted by Backstrom L. introduced supervised random walks that combines graph structure knowledge and link level attributes to rank the users for friends recommendation.
