@@ -18,8 +18,13 @@
 
 \subsection{Snowball Algorithm}
 %In considering the operational models for the extraction of a profile keyword of a user through a social network $G$, we will first treat this problem as an information influence spread processing.
+Twitter user follows other users based on his own interest. If a user is a UCLA student, he is likely to follow other users in UCLA. Similarly, a user who belongs to category $\mathcal{C}$ is likely to follow some other users in $\mathcal{C}$. Thus, a very simple and intuitive relevance score measure is to calculate the fraction of a user's followings that belong to category $\mathcal{C}$, i.e., calculate $s_u$ according to:
+\begin{equation}\label{eq:snowball}
+s_u = \sum_{v \in \following(u)} \frac{s_v}{|\follower(u)|}
+\end{equation}
+where the initial value of $s_v$ is 1 if $v \in \mathcal{A}$, and the initial value is 0 if $v \in \mathcal{B}$.
 
-Given a category $\mathcal{C}$ and a keyword $z_{\mathcal{C}}$ which best describes $\mathcal{C}$, each user $u \in V$ has an active score $s_u$ representing the likelihood that $u$ belongs to category $\mathcal{C}$. If $s_u \geq 1$, user $u$ is \emph{active}, indicating $u$ belongs to $\mathcal{C}$; otherwise, $u$ is \emph{inactive}. The snowball algorithm calculates $s_u$ based on the linear threshold model proposed in \cite{snowball1,snowball2}, which captures the influence propagation process in the network.
+%Given a category $\mathcal{C}$ and a keyword $z_{\mathcal{C}}$ which best describes $\mathcal{C}$, each user $u \in V$ has an active score $s_u$ representing the likelihood that $u$ belongs to category $\mathcal{C}$. If $s_u \geq 1$, user $u$ is \emph{active}, indicating $u$ belongs to $\mathcal{C}$; otherwise, $u$ is \emph{inactive}. The snowball algorithm calculates $s_u$ based on the linear threshold model proposed in \cite{snowball1,snowball2}, which captures the influence propagation process in the network.
 
 %For more information, please view paper Maximizing the spread of influence through a social network, page 2.
 
@@ -27,30 +32,30 @@ Given a category $\mathcal{C}$ and a keyword $z_{\mathcal{C}}$ which best descri
 %as time passed, more and more of users followed by $u$ become active; at some point, this cause $u$ to become active, and $u$ influenced his followers.
 
 As shown in Algorithm~\ref{alg:snowball}, the snowball algorithm is an iterative algorithm. Initially, the active score of users in $\mathcal{A}$ is set to 1, while the active score of users in $\mathcal{B}$ is set to 0. So only users in $\mathcal{A}$ are active at the beginning. During each iteration, the algorithm scans through each inactive user $u$ and calculate its new active score based on the active score of $u$'s followings:
-\begin{equation}\label{eq:snowball}
-s_u = \sum_{v \in \following(u)} \frac{s_v}{|\follower(v)|}
-\end{equation}
+%\begin{equation}\label{eq:snowball}
+%s_u = \sum_{v \in \following(u)} \frac{s_v}{|\follower(v)|}
+%\end{equation}
 If the new active score $s_u$ is no less than 1, then user $u$ becomes active. Although user $u$ is inactive at the beginning, he might become active as many of his following becomes active during the iteration, and he will be able to contribute to his followers once he becomes active. The algorithm iterates until no more users could become active. Users in $\mathcal{B}$ are ranked based on the time at which they become active.
 %In order to obtain the ranking result for $z_{\mathcal{C}}$, here we rank the inactive users in $D$ according to their time point to become an active user.
 
 %------------------------------------------------
-\begin{algorithm}[htbp]
-\caption{\textsc{Snowball}}
-\textbf{Input: }{Category $\mathcal{C}$ and keyword $z_{\mathcal{C}}$}\\
-\textbf{Output: }{An array $rank$ containing the users in $\mathcal{B}$ ranked on the probability of belonging to $\mathcal{C}$}
-\begin{algorithmic}[1]
-\STATE $s_u \leftarrow 1$ {\bf for} $u \in \mathcal{A}$, $s_u \leftarrow 0$ {\bf for} $u \in \mathcal{B}$
-\WHILE{$rank$ changed during last iteration}
-\FOR{$u \in V$ s.t. $s_u < 1$}
-    \STATE update $s_u$ according to Eqn.~(\ref{eq:snowball})
-    \STATE {\bf if} $s_u \geq 1$, {\bf then} add $u$ to $rank$
-\ENDFOR
-\ENDWHILE
-\STATE {\bf for} $u \in V$ s.t. $s_u < 1$ {\bf do} add $u$ to $rank$
-\RETURN $rank$
-\end{algorithmic}
-\label{alg:snowball}
-\end{algorithm}
+%\begin{algorithm}[htbp]
+%\caption{\textsc{Snowball}}
+%\textbf{Input: }{Category $\mathcal{C}$ and keyword $z_{\mathcal{C}}$}\\
+%\textbf{Output: }{An array $rank$ containing the users in $\mathcal{B}$ ranked on the probability of belonging to $\mathcal{C}$}
+%\begin{algorithmic}[1]
+%\STATE $s_u \leftarrow 1$ {\bf for} $u \in \mathcal{A}$, $s_u \leftarrow 0$ {\bf for} $u \in \mathcal{B}$
+%\WHILE{$rank$ changed during last iteration}
+%\FOR{$u \in V$ s.t. $s_u < 1$}
+%    \STATE update $s_u$ according to Eqn.~(\ref{eq:snowball})
+%    \STATE {\bf if} $s_u \geq 1$, {\bf then} add $u$ to $rank$
+%\ENDFOR
+%\ENDWHILE
+%\STATE {\bf for} $u \in V$ s.t. $s_u < 1$ {\bf do} add $u$ to $rank$
+%\RETURN $rank$
+%\end{algorithmic}
+%\label{alg:snowball}
+%\end{algorithm}
 %------------------------------------------------
 
 \subsection{Bidirectional Snowball Algorithm}
@@ -74,26 +79,29 @@ The initial value of $p_u$ and $q_u$ is ${1 \over |\mathcal{A}|}$ for $u \in \ma
 
 \subsection{Naive Bayes Algorithm}
 
-The above two algorithms works well in many situations. However, the tweets information are ignored in these two approaches. Our third approach builds a classifier using the tweets information, and predicts how likely a user in $\mathcal{B}$ belongs to category $\mathcal{C}$. The users in $\mathcal{A}$ are positive training examples, and the users in $\mathcal{B}$ are negative training examples.
+The above two algorithms works well in many situations without using any tweets information. %However, the tweets information are ignored in these two approaches.
+Our third approach builds a classifier using the tweets information, and predicts how likely a user in $\mathcal{B}$ belongs to category $\mathcal{C}$. The users in $\mathcal{A}$ are positive training examples, and the users in $\mathcal{B}$ are negative training examples.
 
 %Both two models described above works well in some situations. However, we ignore the tweets information and other profile information in our dataset. With the information extracted from our dataset, another general approach to our problem would be to view it as a classification task. We take users that already have some profile keyword as positive training examples, and treat other users as negative training examples. Then we could learn a classifier that predicts how likely that a user is going to have a profile keyword.
 
-There are many machine learning algorithms which address this classification problem. We use the naive Bayes classifier \cite{frank2000technical} which is one of the most effective and efficient classification algorithm. The problem has two classes, class 1 and class 0. Users in class 1 belong to $\mathcal{C}$, while the users in class 0 do not belong to $\mathcal{C}$. $c = i$ represents the event that the class is $i$.
+There are many machine learning algorithms which address this classification problem. We use the naive Bayes classifier \cite{maron1961automatic} which is one of the most effective and efficient classification algorithm. The classifier separates the users into two classes, users belong to $\mathcal{C}$ ($c = 1$) and users do not belong to $\mathcal{C}$ ($c = 0$).
 
 For each user $u$, let $T_u$ be the collection of $u$'s tweets, location and biography. The word set for corpus $\bigcup_{u = 1}^n T_u$ is $W = \{w_1, \cdots, w_m\}$.
 %the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$.
 $\mathbf{1}_{T_u}(w_i)$ is the indicator function of $T_u$, where $\mathbf{1}_{T_u}(w_i)$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0. Let $w_i = 1$ represents the event that word $w_i$ occurs, and $w_i = 0$ represents the event that word $w_i$ does not occur.
 
-The naive Bayes classifier for $u$ tries to find $i \in \{0, 1\}$, such that
-$$p(c=i | w_1 = \mathbf{1}_{T_u}(w_1), \cdots, w_m = \mathbf{1}_{T_u}(w_m))$$
-is maximized, or equivalently maximize
+For each user $u$, the naive Bayes classifier tries to find $i \in \{0, 1\}$ which maximizes
+$$p(c = i | w_1 = \mathbf{1}_{T_u}(w_1), \cdots, w_m = \mathbf{1}_{T_u}(w_m)),$$
+or equivalently maximizes
 $$p(c = i) \prod_{j=1}^m p(w_j = \mathbf{1}_{T_u}(w_j) | c = i).$$
 As the problem has only two classes, it is equivalent to determining the sign for $s_u$:
 \begin{eqnarray}
 s_u & = & \log(p(c = 1)) - \log(p(c = 0)) \nonumber \\
     & + & \sum_{j=1}^m (p(w_j = \mathbf{1}_{T_u}(w_j)|c = 1) - p(w_j = \mathbf{1}_{T_u}(w_j)|c = 0)). \nonumber
 \end{eqnarray}
-The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$. The value of $p(c = 1)$ is calculated as the fraction of positive training examples, and the value of $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 1)$ is calculated as the number of positive examples such that $w_j$ appears (does not appear) in $T_u$ divided by the number of positive examples if $\mathbf{1}_{T_u}(w_j) = 1$ (if $\mathbf{1}_{T_u}(w_j) = 0$). The calculation of $p(c = 0)$ and $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 0)$ are similar. Finally, the users in $\mathcal{B}$ are ranked based on the value of $s_u$.
+Standard naive Bayes classifier determines whether $u$ belongs to $\mathcal{C}$ based on $s_u$ is positive or negative. Instead of using the sign of $s_u$, we use the value of $s_u$ to determine how likely $u$ belongs to $\mathcal{C}$. The larger the value (positive value) of $s_u$, the more likely $u$ belongs to $\mathcal{C}$; the smaller the value (negative value), the more likely $u$ does not belong to $\mathcal{C}$. Finally, the users in $\mathcal{B}$ are ranked based on the value of $s_u$.
+
+The parameters of the classifier is determined by counting. The value of $p(c = 1)$ is calculated as the fraction of positive training examples, and the value of $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 1)$ is calculated as the number of positive examples such that $w_j$ appears (does not appear) in $T_u$ divided by the number of positive examples if $\mathbf{1}_{T_u}(w_j) = 1$ (if $\mathbf{1}_{T_u}(w_j) = 0$). The calculation of $p(c = 0)$ and $p(w_j = \mathbf{1}_{T_u}(w_j)|c = 0)$ are similar.
 %In this algorithm, the learner attempts to construct a classifier for a set of labeled training examples.
 %There are several machine learning algorithms that address this problem. Here we use a Naive Bayes model which is one of the most effective and efficient classification algorithm. In this algorithm, the learner attempts to construct a classifier for a set of training example with class labels.
 
