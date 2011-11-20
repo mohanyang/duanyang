@@ -18,11 +18,14 @@
 
 \subsection{Snowball Algorithm}
 %In considering the operational models for the extraction of a profile keyword of a user through a social network $G$, we will first treat this problem as an information influence spread processing.
-Twitter user follows other users based on his own interest. If a user is a UCLA student, he is likely to follow other users in UCLA. Similarly, a user who belongs to category $\mathcal{C}$ is likely to follow some other users in $\mathcal{C}$. Thus, a very simple and intuitive relevance score measure is to calculate the fraction of a user's followings that belong to category $\mathcal{C}$, i.e., calculate $s_u$ according to:
+Twitter user follows other users based on his own interest, while user's tweets are pushed to his followers. Given a category $\mathcal{C}$, the probability of a user $u$ belonging to $\mathcal{C}$ is determined by the relevance score $s_u$. Assume the probability of $u$ publishing a tweet belonging to $\mathcal{C}$ is also $s_u$, and each user publishes the same number ($k$) of tweets. Then the total number of tweets received by $u$ is $|\following(u)|k$, while $\sum_{v \in \following(u)} s_v k$ of them belong to $\mathcal{C}$. The probability of receiving a tweet in $\mathcal{C}$ by $u$ is given by
+$${\sum_{v \in \following(u)} s_v k \over |\following(u)|k} = \sum_{v \in following(u)}{s_v \over |\following(u)|}.$$
+Further assume that a user publishes exactly what he receives, then the probability of publishing a tweet in $\mathcal{C}$ by $u$ is
 \begin{equation}\label{eq:snowball}
-s_u = \sum_{v \in \following(u)} \frac{s_v}{|\follower(u)|}
+s_u = \sum_{v \in \following(u)} \frac{s_v}{|\following(u)|}.
 \end{equation}
-where the initial value of $s_v$ is 1 if $v \in \mathcal{A}$, and the initial value is 0 if $v \in \mathcal{B}$.
+
+%If a user is a UCLA student, he is likely to follow other users in UCLA. Similarly, a user who belongs to category $\mathcal{C}$ is likely to follow some other users in $\mathcal{C}$. Thus, a very simple and intuitive relevance score measure is to calculate the fraction of a user's followings that belong to category $\mathcal{C}$, i.e., calculate $s_u$ according to:
 
 %Given a category $\mathcal{C}$ and a keyword $z_{\mathcal{C}}$ which best describes $\mathcal{C}$, each user $u \in V$ has an active score $s_u$ representing the likelihood that $u$ belongs to category $\mathcal{C}$. If $s_u \geq 1$, user $u$ is \emph{active}, indicating $u$ belongs to $\mathcal{C}$; otherwise, $u$ is \emph{inactive}. The snowball algorithm calculates $s_u$ based on the linear threshold model proposed in \cite{snowball1,snowball2}, which captures the influence propagation process in the network.
 
@@ -31,11 +34,13 @@ where the initial value of $s_v$ is 1 if $v \in \mathcal{A}$, and the initial va
 %Given keyword $z_{\mathcal{C}}$, users are partitioned into sets $\mathcal{A}$ and $\mathcal{B}$. The users in $\mathcal{A}$ are active, and users in set $\mathcal{B}$ are inactive. We focus on settings guided by previous work about the spread of influence in which each user's state to become active increases monotonically as more of its friends become actives. The snowball algorithm is an iterative algorithm. Once a user become active, it remains active in the future iterations. For an inactive user $u$, more and more followings of $u$ become active after many iterations, and $u$ might become active if enough
 %as time passed, more and more of users followed by $u$ become active; at some point, this cause $u$ to become active, and $u$ influenced his followers.
 
-As shown in Algorithm~\ref{alg:snowball}, the snowball algorithm is an iterative algorithm. Initially, the active score of users in $\mathcal{A}$ is set to 1, while the active score of users in $\mathcal{B}$ is set to 0. So only users in $\mathcal{A}$ are active at the beginning. During each iteration, the algorithm scans through each inactive user $u$ and calculate its new active score based on the active score of $u$'s followings:
+The snowball algorithm iteratively calculates the value of $s_u$ according to Eqn.~(\ref{eq:snowball}). Initially, $s_u$ is set to 1 for $u \in \mathcal{A}$, and $s_u$ is 0 for $u \in \mathcal{B}$. During each iteration, the algorithm scans through each user $u \in \mathcal{B}$, and updates $s_u$ according to Eqn.~(\ref{eq:snowball}) (the $s_v$ value in equation is the old value in the last iteration). The algorithm iterates until the terminate condition is satisfied. Typical terminate condition can be an upper bound on the iteration number, or the ranking of users does not change during two consecutive iterations. The users in $\mathcal{B}$ are ranked based on the final value of $s_u$.
+
+%As shown in Algorithm~\ref{alg:snowball}, the snowball algorithm is an iterative algorithm. Initially, the active score of users in $\mathcal{A}$ is set to 1, while the active score of users in $\mathcal{B}$ is set to 0. So only users in $\mathcal{A}$ are active at the beginning. During each iteration, the algorithm scans through each inactive user $u$ and calculate its new active score based on the active score of $u$'s followings:
 %\begin{equation}\label{eq:snowball}
 %s_u = \sum_{v \in \following(u)} \frac{s_v}{|\follower(v)|}
 %\end{equation}
-If the new active score $s_u$ is no less than 1, then user $u$ becomes active. Although user $u$ is inactive at the beginning, he might become active as many of his following becomes active during the iteration, and he will be able to contribute to his followers once he becomes active. The algorithm iterates until no more users could become active. Users in $\mathcal{B}$ are ranked based on the time at which they become active.
+%If the new active score $s_u$ is no less than 1, then user $u$ becomes active. Although user $u$ is inactive at the beginning, he might become active as many of his following becomes active during the iteration, and he will be able to contribute to his followers once he becomes active. The algorithm iterates until no more users could become active. Users in $\mathcal{B}$ are ranked based on the time at which they become active.
 %In order to obtain the ranking result for $z_{\mathcal{C}}$, here we rank the inactive users in $D$ according to their time point to become an active user.
 
 %------------------------------------------------
@@ -60,22 +65,28 @@ If the new active score $s_u$ is no less than 1, then user $u$ becomes active. A
 
 \subsection{Bidirectional Snowball Algorithm}
 
-The underlying graph structure of twitter social network is similar to that of the Web graph, where a user in twitter corresponds to a page in the Web, and a following relation between two users corresponds to a directed hyperlink between two pages. Existing methods like PageRank\cite{page1999pagerank}, TrustRank\cite{gyngyi2004combating} and random walks with restarts\cite{tong2006fast} are popular random walk based methods for ranking nodes in the Web graph. Our second approach uses a variant of TrustRank to calculate the relevance score $s_u$ for each user $u$. The idea is user $v$ positively contributes to $u$'s relevance score if $v$ is $u$'s following, and user $w$ also positively contributes to $u$'s relevance score if $w$ is $u$'s follower.
+%The underlying graph structure of twitter social network is similar to that of the Web graph, where a user in twitter corresponds to a page in the Web, and a following relation between two users corresponds to a directed hyperlink between two pages. Existing methods like PageRank\cite{page1999pagerank}, TrustRank\cite{gyngyi2004combating} and random walks with restarts\cite{tong2006fast} are popular random walk based methods for ranking nodes in the Web graph. Our second approach uses a variant of TrustRank to calculate the relevance score $s_u$ for each user $u$. The idea is user $v$ positively contributes to $u$'s relevance score if $v$ is $u$'s following, and user $w$ also positively contributes to $u$'s relevance score if $w$ is $u$'s follower.
+
+The snowball algorithm considers the tweets propagation from user to his followers. The inverse part of this process is the propagation from a user to his followings. A user in $\mathcal{C}$ tends to follow many users in $\mathcal{C}$, while a user followed by many users in $\mathcal{C}$ tends to belong to $\mathcal{C}$. This intuition leads to the bidirectional snowball algorithm. It calculates two vectors, $P = (p_1, \cdots, p_n)$ and $Q = (q_1, \cdots, q_n)$, where $p_u$ represents the relevance score of user $u$ to category $\mathcal{C}$ with respect to the following direction, and $q_u$ represents the relevance score with respect to the follower direction. The updating process is similar to the snowball algorithm:
+\begin{eqnarray}\label{eq:bidsnowball}
+p_u & = & \sum_{v \in \following(u)} \frac{p_v}{|\following(u)|} \nonumber \\
+q_u & = & \sum_{v \in \follower(u)} \frac{q_v}{|\follower(u)|}
+\end{eqnarray}
 
 %Considering the graph structure generated by twitter social network, it is similar to web graph structure where users are pages, and there are some outgoing links from $u$ to $v$ since that $u$ is following $v$, and also incoming links from $v$ to $u$ since that $u$ is followed by $v$.
 
 %In order to predict the relationship between keywords or phrase and users, a second general approach is to predict the relationship importance between users in $D$ and users in $L$. For user $u$, an easy way to rank the importance of other users to him is performing the random walk from $u$. After the random walk starting from user $u$ go through his friends links, we obtain the rank of users in which top ranked users might be most important guy that $u$ follows. By the random walk starting from user $u$ go through his follower links, we obtain the rank of users in which top ranked users might be most important guy that followed $u$. For a specified or phrase $z$, we add undirected links from $z$ to users have this keyword. And then, after the random walk from user $u$, we get how important that $z$ is related to $u$ in both directions.
 
-Define two vectors, $P = (p_1, \cdots, p_n)$ and $Q = (q_1, \cdots, q_n)$, where $p_u$ represents the relevance score of user $u$ to category $\mathcal{C}$ with respect to the following direction, and $q_u$ represents the relevance score with respect to the follower direction.
+%Define two vectors, $P = (p_1, \cdots, p_n)$ and $Q = (q_1, \cdots, q_n)$, where $p_u$ represents the relevance score of user $u$ to category $\mathcal{C}$ with respect to the following direction, and $q_u$ represents the relevance score with respect to the follower direction.
 %However, we don't have computation power to perform this random walk since that there are too many users in social network. We modify this model in reverse direction as the Trust-rank algorithm. For keyword or phrase $z_i$, we use $a_j$ represent the importance that user $u_j$ is related to $z_i$ in friends direction and $s_j$ represent the importance that $u_j$ is related to $z_i$ in followers direction. Additionally, we use vector $P = (p_1, p_2, \cdots, p_n)$ and $Q = (q_1, q_2, \cdots, q_n)$.
-In the following direction, $u$ receives weight from each of his followings with probability $(1 - d) / |\following(u)|$. On the other hand, $u$ receives weight from each of his followers with probability $(1 - d) / |\follower(u)|$ in the follower direction. The random walk is formulated as:
-\begin{eqnarray}\label{eq:randomwalk}
-P & = & (1 - d) M_P P + d T \nonumber \\
-Q & = & (1 - d) M_Q Q + d T
-\end{eqnarray}
-$M_P$ and $M_Q$ are $n \times n$ transition matrices described above. Vector $T$ represents the trust value of each user, where $T_u = \frac{1}{|\mathcal{A}|}$ for $u \in \mathcal{A}$ and $T_u = 0$ for $u \in \mathcal{B}$. $d$ is the damping factor.
+%In the following direction, $u$ receives weight from each of his followings with probability $(1 - d) / |\following(u)|$. On the other hand, $u$ receives weight from each of his followers with probability $(1 - d) / |\follower(u)|$ in the follower direction. The random walk is formulated as:
+%\begin{eqnarray}\label{eq:randomwalk}
+%P & = & (1 - d) M_P P + d T \nonumber \\
+%Q & = & (1 - d) M_Q Q + d T
+%\end{eqnarray}
+%$M_P$ and $M_Q$ are $n \times n$ transition matrices described above. Vector $T$ represents the trust value of each user, where $T_u = \frac{1}{|\mathcal{A}|}$ for $u \in \mathcal{A}$ and $T_u = 0$ for $u \in \mathcal{B}$. $d$ is the damping factor.
 
-The initial value of $p_u$ and $q_u$ is ${1 \over |\mathcal{A}|}$ for $u \in \mathcal{A}$, otherwise it is 0. Each iteration updates the value of $P$ and $Q$ based on Eqn.~(\ref{eq:randomwalk}), and normalizes vector $P$ and $Q$ into unit vectors. Finally, the users are ranked according to the relevance score $s_u = p_u q_u$ after convergence, which is a combination of relevance to category $\mathcal{C}$ from both following and follower directions.
+The initial value of $p_u$ and $q_u$ is 1 for $u \in \mathcal{A}$, otherwise it is 0. Each iteration updates the value of $P$ and $Q$ based on Eqn.~(\ref{eq:bidsnowball}). Finally, the users are ranked according to the relevance score $s_u = p_u q_u$ after convergence, which is a combination of relevance to category $\mathcal{C}$ from both following and follower directions.
 
 \subsection{Naive Bayes Algorithm}
 
@@ -125,21 +136,20 @@ The bidirectional snowball algorithm and naive Bayes algorithm focus on differen
 
 %Because our two models (i) based on different prospective of user behaviors; (ii) each training method is sufficient to train a good ranker when we have enough training data; (iii) two prospective of user behaviors are conditionally independent given the class. So we use co-training \cite{cotraining} method to combine two approaches.
 
-In the co-training process, we have user set $\mathcal{A}$ and $\mathcal{B}$ as described in previous section. Let $l$ are $k$ be positive integers, and $k > l$. During each iteration, top $l$ users generated by the naive Bayes algorithm and top $l$ users generated by bidirectional snowball algorithm are merged into set $\mathcal{A}$. The merged users are considered as positive training examples during later training process. The iteration is executed until the top $k$ users generated by the bidirectional snowball algorithm and naive Bayes algorithm are the same. The result of the last execution of the naive Bayes algorithm is used as the final result of the co-training algorithm. We describe this algorithm in Table 
-\ref{alg:cotrain}.
+Co-training algorithm is described in Algorithm~\ref{alg:cotrain}. Users are partitioned into two disjoint sets $\mathcal{A}$ and $\mathcal{B}$ described in Section~\ref{sec:problem}. $l$ and $k$ are positive integer parameters, and $k > l$. During each iteration, top $l$ users generated by the naive Bayes algorithm and top $l$ users generated by bidirectional snowball algorithm are merged into set $\mathcal{A}$. The merged users are considered as positive training examples during later training process. The iteration is executed until the top $k$ users generated by the bidirectional snowball algorithm and naive Bayes algorithm are the same. The result of the last execution of the naive Bayes algorithm is used as the final result of the co-training algorithm.
 
 \begin{algorithm}[htbp]
 \caption{\textsc{Co-training}}
-\textbf{Input: }{Category $\mathcal{C}$, keyword $z_{\mathcal{C}}$}, parameter $k$ and $l$\\
-\textbf{Output: }{An array $rank$ containing the users in $\mathcal{B}$ ranked on he probability of belonging to $\mathcal{C}$}
+\textbf{Input: }{Category $\mathcal{C}$, two disjoint sets $\mathcal{A}$ and $\mathcal{B}$, parameter $k$ and $l$}\\
+\textbf{Output: }{An array $rank$ containing users in $\mathcal{B}$ ranked on the probability of belonging to $\mathcal{C}$}
 \begin{algorithmic}[1]
 \REPEAT
-\STATE Use $\mathcal{A}$ and $\mathcal{B}$ to perform bidirectional snowball algorithm.
-\STATE Use $\mathcal{A}$ and $\mathcal{B}$ to perform naive Bayes algorithm.
-\STATE Put top $l$ users returned by bidirectional snowball algorithm in $\mathcal{A}$.
-\STATE Put top $l$ users returned by naive Bayes algorithm in $\mathcal{A}$.
-\UNTIL{Top $k$ users returned by two algorithm are same.}
-\RETURN $rank$ generated by naive Bayes algorithm.
+\STATE $rank^{\prime}$ $\leftarrow$ bidirectional snowball algorithm($\mathcal{A}$, $\mathcal{B}$)
+\STATE $rank$ $\leftarrow$ naive Bayes algorithm($\mathcal{A}$, $\mathcal{B}$)
+\STATE $\mathcal{A} \leftarrow \mathcal{A} + $ \{top $l$ users in $rank^{\prime}$\}
+\STATE $\mathcal{A} \leftarrow \mathcal{A} + $ \{top $l$ users in $rank$\}
+\UNTIL{Top $k$ users in $rank^{\prime}$ and $rank$ are the same}
+\RETURN $rank$
 \end{algorithmic}
 \label{alg:cotrain}
 \end{algorithm}
