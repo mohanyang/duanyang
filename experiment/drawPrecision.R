@@ -54,17 +54,16 @@ legend("topright", c("SA", "BSA", "NBA", "CA"), cex=0.8, col=plot_colors,
 
 report_data <- read.table("D:/research/twitter/cs246/ucla/report_loss.txt", header=T, sep="\t")
 
-plot_colors <- c(rgb(r=0.0,g=0.0,b=0.9),
-	"red",
+plot_colors <- c(	"red",
 	"forestgreen",
 	rgb(r=0.0, g=0.0, b=0.0))
 par(mar=c(4.2, 4.2, 0.5, 0.5))
 
-plot(report_data$BSA, type="l", col=plot_colors[2], 
+plot(report_data$BSA, type="l", col=plot_colors[1], 
    ylim=range(0.4, 1.0), axes=F, xlab="Percentage of positive examples",
-   ylab="Precision", cex.lab=1, lwd=2)
-lines(report_data$NBA, type="l", lty=2, lwd=2, col=plot_colors[3])
-lines(report_data$CA, type="l", lty=3, lwd=2, col=plot_colors[4])
+   ylab="Precision", cex.lab=1, lwd=2, lty=2)
+lines(report_data$NBA, type="l", lty=3, lwd=2, col=plot_colors[2])
+lines(report_data$CA, type="l", lty=4, lwd=2, col=plot_colors[3])
 axis(2, las=1, cex.axis=0.8)
 axis(1,at=(1:10),lab=c("10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"), cex.axis=0.8)
 box()
