@@ -20,6 +20,6 @@ barplot(height, ylab = "Precision@100",
  xlab="Percentage",
  names.arg=c("10%","20%","30%","40%","50%","60%","70%","80%","90%","100%"))
 
-legend("topleft", c("RSA","NBA","CM"), cex=0.6, 
+legend("topleft", c("BSA","NBA","CM"), cex=0.6, 
    bty="n", fill=rainbow(3));
 box()
