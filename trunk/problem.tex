@@ -12,8 +12,8 @@
 \newcommand{\follower}{\ensuremath{follower}}
 
 \section{Problem Formulation}\label{sec:problem}
-We formulate the social network in twitter as a directed graph $G = (V,E)$.
-Each node $u \in V = \{1, 2, \cdots, n\}$ represents a user in twitter, and a directed edge $(u,v) \in E$ indicates
+We formulate the social network in Twitter as a directed graph $G = (V,E)$.
+Each node $u \in V = \{1, 2, \cdots, n\}$ represents a user, and a directed edge $(u,v) \in E$ indicates
 user $u$ is following user $v$. The set of users who are following user $u$ is denoted as $\follower(u)$, and the set of users followed by $u$ is denoted as $\following(u)$. The size of these two sets are $|\follower(u)|$ and $|\following(u)|$, respectively.
 
 %For each user $u$, let the set of tweets published by $u$ be $T_u = \{t_1, t_2, \cdots\}$, where each tweet $t_i \in T_u$ contains a set of words from $W = \{w_1, \cdots, w_m\}$. Then $T_u$ can be viewed as a bag of words from $W$. Let $\phi_u$ be the word occurrence vector in $T_u$, where $\phi_{u, i}$ equals to 1 if word $w_i$ appears in $T_u$, otherwise it equals to 0.
@@ -33,7 +33,7 @@ user $u$ is following user $v$. The set of users who are following user $u$ is d
 %and accurately, we choose some phrases manually and consider other words in
 %profile as single keyword for the user.
 
-Given a category $\mathcal{C}$, we want to identify all the users that belong to $\mathcal{C}$. For example, if the category is ``people in UCLA'', the task is to identify all the users in UCLA. The user set $V$ is partitioned into two disjoint sets $\mathcal{A}$ and $\mathcal{B}$ based on some prior knowledge. It is almost for sure that the users in $\mathcal{A}$ belong to $\mathcal{C}$, whereas the results for users in $\mathcal{B}$ are unknown. For example, users in $V$ can be partitioned based on whether keyword ``UCLA'' appears in a user's biography or not. It is clear that users in $\mathcal{A}$ are highly likely to be UCLA related. However, a user in $\mathcal{B}$ may still belong to $\mathcal{C}$ even if he does not have ``UCLA'' is his biography. A student who writes ``loving being a BRUIN and loving God!'' in his biography belongs to set $\mathcal{B}$, but he is actually a UCLA student.
+Given a category $\mathcal{C}$, we want to identify all the users that belong to $\mathcal{C}$. For example, if the category is ``people in UCLA'', the task is to identify all the users in UCLA. The user set $V$ is partitioned into two disjoint sets $\mathcal{A}$ and $\mathcal{B}$ based on some prior knowledge. It is almost for sure that the users in $\mathcal{A}$ belong to $\mathcal{C}$, whereas the results for users in $\mathcal{B}$ are unknown. For example, users in $V$ can be partitioned based on whether keyword ``UCLA'' appears in a user's biography or not. It is clear that users in $\mathcal{A}$ are highly likely to be UCLA-related. However, a user in $\mathcal{B}$ may still belong to $\mathcal{C}$ even if he does not have ``UCLA'' is his biography. A student who writes ``loving being a BRUIN and loving God!'' in his biography belongs to set $\mathcal{B}$, but he is actually a UCLA student.
 
 %we might find a keyword $z_{\mathcal{C}}$ which best describes this category. For example, keyword ``UCLA'' might represent the category of people in UCLA. Users in $V$ can be partitioned into two sets $\mathcal{A}$ and $\mathcal{B}$ based on whether $z_{\mathcal{C}}$ appears in a user's short bio or not. It is clear that the users in $\mathcal{A}$ are highly likely to belong to $\mathcal{C}$. However, a user $u \in B$ may still belong to $\mathcal{C}$ even if he does not have $z_{\mathcal{C}}$ is his short bio. For example, a student may write ``loving being a BRUIN and loving God!'' in his short bio. Although he belongs to set $\mathcal{B}$ if the keyword is ``UCLA'', he is actually a ``UCLA'' student.
 %Given a keyword or phrase $z_i$, we call users which write $z_i$ in their
