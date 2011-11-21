@@ -86,7 +86,7 @@ q_u & = & \sum_{v \in \follower(u)} \frac{q_v}{|\follower(u)|}
 %\end{eqnarray}
 %$M_P$ and $M_Q$ are $n \times n$ transition matrices described above. Vector $T$ represents the trust value of each user, where $T_u = \frac{1}{|\mathcal{A}|}$ for $u \in \mathcal{A}$ and $T_u = 0$ for $u \in \mathcal{B}$. $d$ is the damping factor.
 
-The initial value of $p_u$ and $q_u$ is 1 for $u \in \mathcal{A}$, otherwise it is 0. Each iteration updates the value of $P$ and $Q$ based on Eqn.~(\ref{eq:bidsnowball}). Finally, the users are ranked according to the relevance score $s_u = p_u q_u$ after convergence, which is a combination of relevance to category $\mathcal{C}$ from both following and follower directions.
+The initial value of $p_u$ and $q_u$ is 1 for $u \in \mathcal{A}$, otherwise it is 0. Each iteration updates the value of $P$ and $Q$ based on Eqn.~(\ref{eq:bidsnowball}). Finally, the users are ranked according to the relevance score $s_u = p_u q_u$, which is a combination of relevance to category $\mathcal{C}$ from both following and follower directions.
 
 \subsection{Naive Bayes Algorithm}
 
