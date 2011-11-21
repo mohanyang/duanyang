@@ -9,14 +9,21 @@
 
 \title{Extracting User's Hidden Profile on Twitter}
 
-\author{Dong Wang, Mohan Yang, Yuchen Liu}
+\author{
+Dong Wang, Mohan Yang, Yuchen Liu
+\and
+\alignauthor
+\affaddr{Department of Computer Science}\\
+\affaddr{University of California, Los Angeles}\\
+\email{\{dongw, yang, yliu\}@cs.ucla.edu}
+}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-Targeting user profile to match a user with specific services is a fundamental task for social network system. In this paper we are given a set of users within a category $\mathcal{C}$ and would like to infer which users are also in this category with high probability. We show that the information contained in graph structure and tweets are highly related to users profile. We develop several algorithms and design the co-training framework based on bidirectional snowball algorithm and naive Bayes algorithm. Our experiments on Twitter social network show that our approaches performs well in retrieving users within target category.
+In a social network environment like Twitter and Facebook, user modeling is an essential approach to know a user's interests, and thus making other additional services such as recommendation system possible and accurate. In user modeling, user profile is an important factor since it's written by user and it provides pretty accurate information. Previous social network websites such as Facebook and MySpace build a detailed profile when a user starts to use, letting a user fill in his/her personal information, education and work, family information as well as interests. However, Twitter has a different setting for user profile and it only allows a user to fill in a short bio within 160 characters to describe him/herself. Without the structured information, it's getting harder to build an accurate user profile. Meanwhile, according to our statistics, about 27.2\% of users do not have a self-written bio or their bio is less than 5 characters and about 43.9\% of users don't have a meaningful bio description since there are less than 10 characters in their bio. Thus, it becomes important for us to extract useful user profile for those who don't have a meaningful bio in order to model users accurately. In this paper, we propose approaches and models in two different categories, using social network link structure only and using user-generated content only, respectively. We also propose a co-training model to combine approaches in these two categories to make use of their advantages to achieve a better performance. In our UCLA dataset, co-training model performs a 87\% precison at top 50 results, which give out a promising results for extracting users' hidden profile problem.
 \end{abstract}
 
 \input{intro}

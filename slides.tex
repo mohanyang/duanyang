@@ -33,7 +33,41 @@
 
 \section{Introduction}
 \begin{frame}{Introduction}
-123
+\begin{block}{Tiwtter 101}
+\begin{itemize}
+\item A world of 140 characters
+\item Following, follower \& non-reciprocal relationship
+\item A short biography of 160 characters, plaintext
+    \begin{itemize}
+    \item Difficult to know a user's profile, including affiliation, occupation, interests etc.
+    \item $27.2\%$ of users have a bio less than 5 characters, $43.9\%$ of users have a bio less than 10 characters
+    \end{itemize}
+\end{itemize}
+\end{block}
+\pause
+\begin{block}{Benefit of complete user profile}
+\begin{itemize}
+\item Recommendation system - related users, news and services
+\item Advertisement delivery
+\item Search result relevance
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Introduction}
+\begin{block}{Observations}
+A user is studying at UCLA, but he might not explicitly write this fact in his biography.
+\begin{itemize}
+\item In his followings and followers, there might be a considerate amount of users who is explicitly indicating they are students at UCLA.
+\item In his tweets, he might post about something related to UCLA. He could also retweet tweets containing such information.
+\end{itemize}
+\end{block}
+\pause
+Try to predict whether a user belongs to a category (e.g., studying at UCLA) using the information from
+\begin{itemize}
+\item Followings \& followers
+\item Tweets, location \& biography
+\end{itemize}
 \end{frame}
 
 \section{Problem Formulation}
@@ -151,7 +185,7 @@ Co-training algorithm combines the two algorithms together, iteratively reinforc
 
 \begin{frame}{Precision\at$k$ for UCLA Category}
 \begin{center}
-  \includegraphics[width=200pt]{experiment/e1_ucla.pdf}  
+  \includegraphics[width=200pt]{experiment/e1_ucla.pdf}
 \end{center}
 \end{frame}
 
@@ -170,6 +204,12 @@ Co-training algorithm combines the two algorithms together, iteratively reinforc
 \begin{frame}{Precision\at$k$ for MIT Category}
 \begin{center}
   \includegraphics[width=200pt]{experiment/e1_mit.pdf}
+\end{center}
+\end{frame}
+
+\begin{frame}{3rd Ranking User from Snowball Algorithm for UCLA Category}
+\begin{center}
+  \includegraphics[width=300pt]{experiment/example1.pdf}
 \end{center}
 \end{frame}
 
@@ -206,7 +246,17 @@ Co-training algorithm combines the two algorithms together, iteratively reinforc
 
 \section{Conclusion}
 \begin{frame}{Conclusion}
-saasdas
+\begin{itemize}
+\item Three simple algorithms and a co-training algorithm to rank the users based on the relevance score to a given category
+\item These simple algorithms perform very well on twitter data
+\item Co-training algorithm can be applied to many other problems that require learning to rank the nodes in a graph
+\end{itemize}
+\begin{block}{Future work}
+\begin{itemize}
+\item Different weights for users based on the importance and activity in the network
+\item Apply co-training algorithm to friend recommendation system
+\end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}{}
