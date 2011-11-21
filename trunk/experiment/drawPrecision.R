@@ -60,7 +60,7 @@ plot_colors <- c(	"red",
 par(mar=c(4.2, 4.2, 0.5, 0.5))
 
 plot(report_data$BSA, type="l", col=plot_colors[1], 
-   ylim=range(0.4, 1.0), axes=F, xlab="Percentage of positive examples",
+   ylim=range(0.4, 1.0), axes=F, xlab="t",
    ylab="Precision", cex.lab=1, lwd=2, lty=2)
 lines(report_data$NBA, type="l", lty=3, lwd=2, col=plot_colors[2])
 lines(report_data$CA, type="l", lty=4, lwd=2, col=plot_colors[3])
