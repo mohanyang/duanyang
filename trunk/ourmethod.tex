@@ -146,8 +146,8 @@ Co-training algorithm is described in Algorithm~\ref{alg:cotrain}. Users are par
 \REPEAT
 \STATE $rank^{\prime}$ $\leftarrow$ bidirectional snowball algorithm($\mathcal{A}$, $\mathcal{B}$)
 \STATE $rank$ $\leftarrow$ naive Bayes algorithm($\mathcal{A}$, $\mathcal{B}$)
-\STATE $\mathcal{A} \leftarrow \mathcal{A} + $ \{top $l$ users in $rank^{\prime}$\}
-\STATE $\mathcal{A} \leftarrow \mathcal{A} + $ \{top $l$ users in $rank$\}
+\STATE $\mathcal{A} \leftarrow \mathcal{A} ~ + $ \{top $l$ users in $rank^{\prime}$\}
+\STATE $\mathcal{A} \leftarrow \mathcal{A} ~ + $ \{top $l$ users in $rank$\}
 \UNTIL{Top $k$ users in $rank^{\prime}$ and $rank$ are the same}
 \RETURN $rank$
 \end{algorithmic}
