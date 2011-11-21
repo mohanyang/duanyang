@@ -22,7 +22,7 @@ legend("topright", names(report_data), cex=1, col=plot_colors,
 ----------------------------------------------------------------------------
 
 
-report_data <- read.table("D:/research/twitter/cs246/ucla/report.all.txt", header=T, sep="\t")
+report_data <- read.table("D:/research/twitter/cs246/ucla/report_active.txt", header=T, sep="\t")
 
 plot_colors <- c(rgb(r=0.0,g=0.0,b=0.9),
 	"red",
@@ -30,7 +30,7 @@ plot_colors <- c(rgb(r=0.0,g=0.0,b=0.9),
 	rgb(r=0.0, g=0.0, b=0.0))
 par(mar=c(4.2, 4.2, 0.5, 0.5))
 plot(report_data$SA, type="l", col=plot_colors[1], 
-   ylim=range(0.4, 1.0), axes=F, xlab="k",
+   ylim=range(0.2, 1.0), axes=F, xlab="k",
    ylab="Precision", cex.lab=1, lwd=2)
 lines(report_data$BSA, type="l", lty=2, lwd=2, col=plot_colors[2])
 lines(report_data$NBA, type="l", lty=3, lwd=2, col=plot_colors[3])
